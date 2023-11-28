@@ -1,5 +1,14 @@
-### Ngx-Admin Angular 8 application from akveo.com
+# Cypress Testing Framework
 
-This is modified and more lightweight version of original application to practice UI Automation with Cypress.
+## Overview
 
-The original repo is here: https://github.com/akveo/ngx-admin
+This repository contains the Cypress testing framework for [Your Project Name]. The framework is designed to automate the testing of [describe what your project does] using Cypress, a powerful end-to-end testing tool.
+
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- Node.js installed (check for the last version https://nodejs.org/en/)
+- [Other dependencies or tools]
+
+## Getting Started
