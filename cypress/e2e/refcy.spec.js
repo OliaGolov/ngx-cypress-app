@@ -1,16 +1,8 @@
 /// <reference types="cypress"/>
+
+import { DateGenerator } from "../helpers/dateGenertator";
+
  
-function dateGenerator() {
-    let date = new Date();
-    date.setDate(date.getDate() + 40);
-    let month = date.toLocaleString("default", { month: "short" });
-    let day = date.getDate()
-    let year = date.getFullYear();
-    let dateToAssert = `${month} ${day}, ${year}`
-
-    return { day, dateToAssert, month, year }
-} 
-
 describe("Login page test suite", () => {
   it("first test", () => {
     //attr
@@ -120,29 +112,35 @@ describe("Login page test suite", () => {
     cy.get('[type="checkbox"]').eq(1).check({ force: true });
   });
 
-  it.only("check checkboxes", () => {
+  it("date picker", () => {
+
+    function selectDayFronCurrent(futureDay) {
+        let date = new Date();
+        date.setDate(date.getDate() + futureDay);
+        let month = date.toLocaleString("default", { month: "short" });
+        let day = date.getDate()
+        let year = date.getFullYear();
+        let dateToAssert = `${month} ${day}, ${year}`
+        cy.get('nb-calendar-navigation').invoke("attr", "ng-reflect-date").then( dateArrtibute => {
+            if(!dateArrtibute.includes(month) || !dateArrtibute.includes(year)){
+                cy.get('[data-name="chevron-right"]').click()
+                selectDayFronCurrent(futureDay)
+            } else {
+                cy.get(".day-cell").not(".bounding-month").contains(day).click();
+            }
+        })
+        return dateToAssert
+    }
+
     cy.visit("/");
     cy.contains("Forms").click();
     cy.contains("Datepicker").click();
-
-    //hardcoded
     cy.contains("nb-card", "Common Datepicker").find("input").then((input) => {
         cy.wrap(input).click();
-
-        function selectDayFronCurrent() {
-            cy.get('nb-calendar-navigation').invoke("attr", "ng-reflect-date").then( dateArrtibute => {
-                if(!dateArrtibute.includes(dateGenerator().month) || !dateArrtibute.includes(dateGenerator().year)){
-                    cy.get('[data-name="chevron-right"]').click()
-                    selectDayFronCurrent()
-                } else {
-                    cy.get(".day-cell").not(".bounding-month").contains(dateGenerator().day).click();
-                }
-        })
-        }
-        selectDayFronCurrent()
-        cy.wrap(input).invoke("prop", "value").should("contain", dateGenerator().dateToAssert);
+        const dateToAssert = selectDayFronCurrent(40)
+        cy.wrap(input).invoke("prop", "value").should("contain", dateToAssert);
         //OR
-        cy.wrap(input).should("have.value",dateGenerator().dateToAssert);
+        cy.wrap(input).should("have.value", dateToAssert);
       });
   });
 });
