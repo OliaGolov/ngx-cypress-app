@@ -17,4 +17,6 @@ describe('Main menu', () => {
             })
             })
         })
+
+    it.only('Table tests')
 })
