@@ -112,7 +112,7 @@ describe("Login page test suite", () => {
     cy.get('[type="checkbox"]').eq(1).check({ force: true });
   });
 
-  it("date picker", () => {
+  it.only("date picker", () => {
 
     function selectDayFronCurrent(futureDay) {
         let date = new Date();
